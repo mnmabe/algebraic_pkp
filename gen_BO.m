@@ -123,9 +123,60 @@ R1 := [];
 return R1;
 end function; 
 
-//----------------------------
-//we have n^2 x vals 
-//we need to randomly assign u coordinates as 0 every n 
+
+function HBOSystem(P,H,C,s,n)
+  L1:= ParityCheckEquations(P, H, C, s, n); 
+  Q1:= FieldEquations(P);
+  Q2:= RegularFormEquations(P);
+
+  S:= L1 cat Q1 cat Q2;
+
+  return S;
+end function; 
+
+
+//------------------------------------------
+// Degree of Regularity for the BO Modeling
+//------------------------------------------
+
+// Return the largest homogeneous component of every f in X
+function Top(X)
+  return [HomogeneousComponent(f, TotalDegree(f)) : f in X];
+end function;
+
+function HilbertSeriesQL(S)
+
+  HS := HilbertSeriesIdeal(Top(S));
+    
+  return HS;
+end function;
+
+function DReg(HS)
+   d:= Degree(HS)+1; 
+
+   return d;
+end function;
+
+
+//------------------------------------
+// Solving Degree for the BO Modeling
+//------------------------------------
+
+SetVerbose("Faugere",2);
+
+function RunIt(S)
+  I:=Ideal(S);
+  V:=GroebnerBasis(I);
+  return V;
+end function;
+
+
+//------------------------------------
+// Hybrid Guessing Technique Instance
+// we have n^2 x vals and want to 
+// randomly assign u coordinates as 0 
+// every n 
+//------------------------------------
 
 function ErrorFreeIndices(n,u)
 
@@ -146,28 +197,3 @@ S0:= [pvec[i] : i in I];
 
 return S0; 
 end function; 
-
-
-function HBOSystem(P,H,C,s,n)
-  L1:= ParityCheckEquations(P, H, C, s, n); 
-  Q1:= FieldEquations(P);
-  Q2:= RegularFormEquations(P);
-
-  S:= L1 cat Q1 cat Q2;
-
-  return S;
-end function; 
-
-
-function HilbertSeriesQL(S)
-
-  HS := HilbertSeriesIdeal(Top(S));
-    
-  return HS;
-end function;
-
-function DReg(HS)
-   d:= Degree(HS)+1; 
-
-   return d;
-end function;
