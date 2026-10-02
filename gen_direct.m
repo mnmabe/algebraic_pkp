@@ -89,3 +89,44 @@ function GenSystem(n, m, q)
   S := System(P, H, c, s);
   return S;
 end function;
+
+//----------------------------------------------
+// Degree of Regularity for the Direct Modeling
+//----------------------------------------------
+
+// Return the largest homogeneous component of every f in X
+function Top(X)
+  return [HomogeneousComponent(f, TotalDegree(f)) : f in X];
+end function;
+
+function HilbertSeriesD(n, q)
+  Fqx<[x]> := PolynomialRing(GF(q), n^2, "grevlex");
+  P := Matrix(Fqx, n, n, x);
+  
+  Q1, Q2, Q3 := QuadraticPermEquations(P);
+  L1, L2 := LinearPermEquations(P);
+  F := Q1 cat Q2 cat Q3 cat L1 cat L2;
+
+  HS := HilbertSeriesIdeal(Top(F));
+    
+  return HS;
+end function;
+
+function DReg(HS)
+   d:= Degree(HS)+1; 
+
+   return d;
+end function;
+
+//----------------------------------------
+// Solving Degree for the Direct Modeling
+//----------------------------------------
+SetVerbose("Faugere",2);
+
+function RunIt(S)
+  I:=Ideal(S);
+  V:=GroebnerBasis(I);
+  return V;
+end function;
+
+
