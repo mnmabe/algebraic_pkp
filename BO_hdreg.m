@@ -1,7 +1,3 @@
-//-------------------------
-//Tables 2 and 5 use the 
-
-
 "------ Hybrid BO Eq (9) and (10) Degree of Regularity --------";
 
 function SemiReg9(n,k,B,u,h,f)
